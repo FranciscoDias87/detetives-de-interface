@@ -274,47 +274,52 @@ export default function App() {
           </div>
         </div>
 
-        {/* Barra de Navegação mobile compacta por causa do Iframe */}
-        <div className="flex lg:hidden overflow-x-auto gap-1 px-4 py-2 bg-slate-100 border-t border-slate-200 justify-start no-scrollbar">
+        {/* Barra de Navegação mobile premium, alinhada com as melhores práticas de mobile first */}
+        <div className="flex lg:hidden bg-slate-800 border-t border-slate-700/60 justify-around p-1.5 sticky top-0 z-40 shadow-md">
           <button 
             onClick={() => { playSound('click'); setCurrentScenario('intro'); }}
-            className={`px-3 py-1 rounded-full text-[11px] font-bold shrink-0 transition-all ${
-              currentScenario === 'intro' ? 'bg-slate-900 text-white' : 'text-slate-600'
+            className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all grow ${
+              currentScenario === 'intro' ? 'text-amber-400 bg-slate-900/50 font-bold' : 'text-slate-400'
             }`}
           >
-            🚀 Início
+            <span className="text-base leading-none">🚀</span>
+            <span className="text-[10px] font-sans uppercase tracking-tight mt-0.5">Início</span>
           </button>
           <button 
             onClick={() => { playSound('click'); setCurrentScenario('social'); }}
-            className={`px-3 py-1 rounded-full text-[11px] font-bold shrink-0 transition-all ${
-              currentScenario === 'social' ? 'bg-sky-500 text-white' : 'text-slate-600'
+            className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all grow ${
+              currentScenario === 'social' ? 'text-sky-400 bg-slate-900/50 font-bold' : 'text-slate-400'
             }`}
           >
-            📱 Caso 1: Rede
+            <Compass className="w-4 h-4" />
+            <span className="text-[10px] font-sans uppercase tracking-tight mt-0.5">Caso 1</span>
           </button>
           <button 
             onClick={() => { playSound('click'); setCurrentScenario('pdv'); }}
-            className={`px-3 py-1 rounded-full text-[11px] font-bold shrink-0 transition-all ${
-              currentScenario === 'pdv' ? 'bg-emerald-600 text-white' : 'text-slate-600'
+            className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all grow ${
+              currentScenario === 'pdv' ? 'text-emerald-400 bg-slate-900/50 font-bold' : 'text-slate-400'
             }`}
           >
-            🛒 Caso 2: PDV
+            <ShoppingCart className="w-4 h-4" />
+            <span className="text-[10px] font-sans uppercase tracking-tight mt-0.5">Caso 2</span>
           </button>
           <button 
             onClick={() => { playSound('click'); setCurrentScenario('report'); }}
-            className={`px-3 py-1 rounded-full text-[11px] font-bold shrink-0 transition-all ${
-              currentScenario === 'report' ? 'bg-amber-500 text-white' : 'text-slate-600'
+            className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all grow ${
+              currentScenario === 'report' ? 'text-amber-500 bg-slate-900/50 font-bold' : 'text-slate-400'
             }`}
           >
-            📂 Dossiê ({foundBugs.length})
+            <Fingerprint className="w-4 h-4" />
+            <span className="text-[10px] font-sans uppercase tracking-tight mt-0.5">Dossiê ({foundBugs.length})</span>
           </button>
           <button 
             onClick={() => { playSound('click'); setCurrentScenario('teacher'); }}
-            className={`px-3 py-1 rounded-full text-[11px] font-bold shrink-0 transition-all ${
-              currentScenario === 'teacher' ? 'bg-slate-800 text-sky-400' : 'text-slate-600'
+            className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all grow ${
+              currentScenario === 'teacher' ? 'text-indigo-400 bg-slate-900/50 font-bold' : 'text-slate-400'
             }`}
           >
-            👨‍🏫 Mestre
+            <Presentation className="w-4 h-4" />
+            <span className="text-[10px] font-sans uppercase tracking-tight mt-0.5">Mestre</span>
           </button>
         </div>
       </header>

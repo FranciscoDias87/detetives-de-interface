@@ -39,6 +39,7 @@ export default function PosShell({
   isCorrected, 
   setIsCorrected 
 }: PosShellProps) {
+  const [mobileTab, setMobileTab] = useState<'terminal' | 'pistas'>('terminal');
   // Estado para os itens no carrinho
   const [cart, setCart] = useState<CartItem[]>([
     { id: 1, code: '78910001', name: 'Arroz Integral Camil 1kg', qty: 1, price: 6.90 },
@@ -159,9 +160,37 @@ export default function PosShell({
   };
 
   return (
-    <div className="flex flex-col xl:flex-row gap-6 items-stretch justify-center p-4 w-full">
+    <div className="flex flex-col xl:flex-row gap-6 items-stretch justify-center p-2 sm:p-4 w-full max-w-6xl mx-auto">
+      {/* Seletor Segmentado Exclusivo para Telas Mobile */}
+      <div className="sm:hidden flex w-full bg-slate-150 p-1 rounded-xl border border-slate-200/60 mb-2 gap-1 shrink-0">
+        <button 
+          type="button"
+          onClick={() => setMobileTab('terminal')}
+          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+            mobileTab === 'terminal' 
+              ? 'bg-emerald-600 text-white shadow-sm' 
+              : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          🛒 Terminal Frente de Caixa
+        </button>
+        <button 
+          type="button"
+          onClick={() => setMobileTab('pistas')}
+          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+            mobileTab === 'pistas' 
+              ? 'bg-emerald-600 text-white shadow-sm' 
+              : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          🔍 Pistas & Bugs ({foundBugs.filter(b => b.startsWith('pdv')).length}/2)
+        </button>
+      </div>
+
       {/* Container principal da tela de PDV */}
-      <div className="flex-1 min-w-[320px] bg-neutral-900 text-zinc-100 rounded-2xl border-4 border-neutral-850 p-4 shadow-xl flex flex-col justify-between font-mono relative overflow-hidden">
+      <div className={`flex-1 min-w-[280px] sm:min-w-[320px] bg-neutral-900 text-zinc-100 rounded-2xl border-4 border-neutral-850 p-3 sm:p-4 shadow-xl flex flex-col justify-between font-mono relative overflow-hidden ${
+        mobileTab === 'terminal' ? 'flex' : 'hidden sm:flex'
+      }`}>
         
         {/* Topo do PDV - Identificação do Terminal */}
         <div className="border-b border-neutral-850 pb-3 mb-3 flex flex-wrap justify-between items-center gap-3">
@@ -196,8 +225,8 @@ export default function PosShell({
                 )}
               </div>
 
-              {/* Tabela de Itens */}
-              <div className="overflow-x-auto">
+              {/* Tabela de Itens (Desktop) */}
+              <div className="hidden sm:block overflow-x-auto">
                 <table className="w-full text-left text-xs text-zinc-300">
                   <thead>
                     <tr className="border-b border-neutral-800 text-zinc-500 text-[10px] uppercase">
@@ -238,6 +267,35 @@ export default function PosShell({
                     )}
                   </tbody>
                 </table>
+              </div>
+
+              {/* Lista Adaptativa para Dispositivos Mobile (Mobile First) */}
+              <div className="block sm:hidden space-y-2 max-h-56 overflow-y-auto no-scrollbar">
+                {cart.length === 0 ? (
+                  <div className="text-center py-6 text-zinc-650 text-xs">
+                    Carrinho vazio. Adicione um novo item!
+                  </div>
+                ) : (
+                  cart.map((item) => (
+                    <div key={item.id} className="bg-neutral-850/65 p-2.5 rounded-lg border border-neutral-800 flex flex-col gap-1 text-xs">
+                      <div className="flex justify-between items-start gap-2">
+                        <span className="font-sans font-bold text-zinc-200 truncate">{item.name}</span>
+                        <button 
+                          onClick={() => deleteCartItem(item.id)}
+                          className="text-neutral-550 hover:text-red-400 p-1 rounded-full transition-colors shrink-0"
+                          title="Remover Item"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <div className="flex justify-between items-center text-[10px] font-mono text-zinc-455 mt-1 border-t border-neutral-800/40 pt-1">
+                        <span>Cód: {item.code}</span>
+                        <span>{item.qty}x R$ {item.price.toFixed(2)}</span>
+                        <span className="font-bold text-amber-500">R$ {(item.qty * item.price).toFixed(2)}</span>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
 
@@ -584,7 +642,9 @@ export default function PosShell({
       </div>
 
       {/* Painel Lateral de Guia dos Detetives */}
-      <div className="flex-1 max-w-md bg-white border border-neutral-200/80 rounded-2xl p-6 shadow-sm flex flex-col justify-between align-stretch self-stretch text-zinc-900">
+      <div className={`flex-1 max-w-md bg-white border border-neutral-200/80 rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col justify-between align-stretch self-stretch text-zinc-900 ${
+        mobileTab === 'pistas' ? 'flex' : 'hidden sm:flex'
+      }`}>
         <div>
           {/* Header */}
           <div className="flex items-center justify-between mb-4 pb-4 border-b border-zinc-100">

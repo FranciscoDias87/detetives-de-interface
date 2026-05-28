@@ -32,6 +32,7 @@ export default function PhoneShell({
   isCorrected, 
   setIsCorrected 
 }: PhoneShellProps) {
+  const [mobileTab, setMobileTab] = useState<'app' | 'pistas'>('app');
   const [activeMenuPostId, setActiveMenuPostId] = useState<number | null>(null);
   const [showTripleClickHint, setShowTripleClickHint] = useState(false);
   const [clicksCount, setClicksCount] = useState<{ [postId: number]: number }>({});
@@ -147,21 +148,49 @@ export default function PhoneShell({
   };
 
   return (
-    <div className="flex flex-col xl:flex-row gap-6 items-center lg:items-start justify-center p-4">
+    <div className="flex flex-col xl:flex-row gap-6 items-center lg:items-start justify-center p-2 sm:p-4 w-full max-w-5xl mx-auto">
+      {/* Seletor Segmentado Exclusivo para Telas Mobile */}
+      <div className="sm:hidden flex w-full bg-slate-150 p-1 rounded-xl border border-slate-200/60 mb-2 gap-1">
+        <button 
+          type="button"
+          onClick={() => setMobileTab('app')}
+          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+            mobileTab === 'app' 
+              ? 'bg-sky-500 text-white shadow-sm' 
+              : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          📱 Simulador SocialCam
+        </button>
+        <button 
+          type="button"
+          onClick={() => setMobileTab('pistas')}
+          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+            mobileTab === 'pistas' 
+              ? 'bg-sky-500 text-white shadow-sm' 
+              : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          🔍 Pistas & Bugs ({foundBugs.filter(b => b.startsWith('social')).length}/3)
+        </button>
+      </div>
+
       {/* Container do Celular */}
-      <div className="relative w-[340px] h-[670px] bg-neutral-900 rounded-[44px] shadow-2xl border-[10px] border-neutral-800 flex flex-col overflow-hidden shrink-0 select-none">
+      <div className={`relative w-full max-w-[340px] h-[580px] sm:h-[670px] bg-neutral-900 rounded-[32px] sm:rounded-[44px] shadow-2xl border-4 sm:border-[10px] border-neutral-800 flex flex-col overflow-hidden shrink-0 select-none ${
+        mobileTab === 'app' ? 'flex' : 'hidden sm:flex'
+      }`}>
         {/* Notch - Alto Falante e Câmera */}
-        <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-neutral-800 rounded-b-2xl z-50 flex items-center justify-between px-4">
+        <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-neutral-800 rounded-b-2xl z-50 flex items-center justify-between px-4 sm:flex hidden">
           <div className="w-12 h-1 bg-neutral-750 rounded-full"></div>
           <div className="w-2.5 h-2.5 bg-neutral-900 rounded-full"></div>
         </div>
 
         {/* Barra de Status */}
-        <div className="h-8 bg-neutral-900 flex justify-between items-center px-6 pt-3 text-[10px] font-mono text-neutral-400 z-40">
+        <div className="h-4 sm:h-8 bg-neutral-900 flex justify-between items-center px-6 pt-1 sm:pt-3 text-[9px] sm:text-[10px] font-mono text-neutral-400 z-40">
           <span>09:41</span>
           <div className="flex items-center gap-1">
-            <Wifi className="w-3 h-3" />
-            <Battery className="w-3.5 h-3.5" />
+            <Wifi className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+            <Battery className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
           </div>
         </div>
 
@@ -173,7 +202,7 @@ export default function PhoneShell({
             <span className="font-serif font-bold text-xl tracking-tight text-neutral-800 flex items-center gap-1.5">
               SocialCam
               {!isCorrected && (
-                <span className="text-[9px] font-mono tracking-wider uppercase px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 flex items-center gap-0.5">
+                <span className="text-[9px] font-mono tracking-wider uppercase px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 flex items-center gap-0.5 animate-pulse">
                   <AlertTriangle className="w-2 h-2" /> Buggy UI
                 </span>
               )}
@@ -221,7 +250,7 @@ export default function PhoneShell({
                           className={`text-[10px] cursor-pointer transition-colors ${
                             isCorrected 
                               ? 'text-zinc-500' 
-                              : `text-zinc-200 bg-gray-50 rounded px-1 -mx-1 ${
+                              : `text-zinc-250 bg-gray-50/80 rounded px-1 -mx-1 ${
                                   foundBugs.includes('social-ui-contrast') 
                                     ? 'text-emerald-700 bg-emerald-55 border border-emerald-500' 
                                     : 'hover:bg-amber-50'
@@ -287,10 +316,10 @@ export default function PhoneShell({
 
                     {/* Feedback visual de cliques */}
                     {!isCorrected && clicksCount[post.id] > 0 && (
-                      <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
-                        <div className="bg-white/95 text-zinc-900 border border-amber-200 px-3 py-1.5 rounded-full text-[10px] font-mono shadow-md flex items-center gap-1">
-                          <HelpCircle className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
-                          Toques na imagem: {clicksCount[post.id]}/3 para abrir Comentários
+                      <div className="absolute inset-x-0 bottom-4 flex justify-center z-20">
+                        <div className="bg-slate-900/95 text-white border border-amber-500/30 px-3 py-1.5 rounded-full text-[10px] font-mono shadow-md flex items-center gap-1">
+                          <HelpCircle className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                          Toques na imagem: {clicksCount[post.id]}/3
                         </div>
                       </div>
                     )}
@@ -331,7 +360,7 @@ export default function PhoneShell({
                         </>
                       ) : (
                         <div className="text-[10px] font-mono text-zinc-400 max-w-xs leading-tight">
-                          ⚠️ <span className="underline">Sem botões rápidos de interação!</span> Como curtir ou comentar? Procure uma pista ou explore o cabeçalho/opções do post!
+                          ⚠️ <span className="underline">Sem botões rápidos de interação!</span> Tente achar onde o botão de curtir foi escondido ou dê múltiplos toques rápidos na foto.
                         </div>
                       )}
                       
@@ -350,23 +379,23 @@ export default function PhoneShell({
                     </span>
                     
                     {/* Legenda com BUG/Ajustada */}
-                    <p className="text-xs leading-relaxed">
+                    <div className="text-xs leading-relaxed">
                       <span className="font-bold mr-1.5 text-zinc-900">{post.user}</span>
                       <span 
                         onClick={handleCaptionClick}
                         className={`transition-colors cursor-pointer ${
                           isCorrected 
                             ? 'text-zinc-700' 
-                            : `text-zinc-300 bg-gray-50 rounded px-1 -mx-0.5 border border-transparent ${
+                            : `text-zinc-400 bg-gray-50/50 rounded px-1 -mx-0.5 border border-transparent inline-block ${
                                 foundBugs.includes('social-ui-contrast') 
-                                  ? 'border-emerald-500 bg-emerald-50 text-emerald-800' 
+                                  ? 'border-emerald-500 bg-emerald-50 text-emerald-800 font-medium' 
                                   : 'hover:border-amber-300 hover:bg-amber-50'
                               }`
                         }`}
                       >
                         {post.caption}
                       </span>
-                    </p>
+                    </div>
 
                     {/* Espaço de Amostra de Comentários ou Alerta dependendo do modo */}
                     {isPostCommentsOpen && (
@@ -422,7 +451,9 @@ export default function PhoneShell({
       </div>
 
       {/* Painel Lateral de Pistas e Controle */}
-      <div className="flex-1 max-w-md bg-white border border-neutral-200/80 rounded-2xl p-6 shadow-sm flex flex-col justify-between align-stretch self-stretch">
+      <div className={`flex-1 max-w-md bg-white border border-neutral-200/80 rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col justify-between align-stretch self-stretch ${
+        mobileTab === 'pistas' ? 'flex' : 'hidden sm:flex'
+      }`}>
         <div>
           {/* Header */}
           <div className="flex items-center justify-between mb-4 pb-4 border-b border-zinc-100">
