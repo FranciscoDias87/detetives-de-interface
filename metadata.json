@@ -1,0 +1,6 @@
+{
+  "name": "Detetives de Interface",
+  "description": "Atividade gamificada interativa para sala de aula sobre UI/UX e Design de Interface em cenários do cotidiano e mercado de trabalho.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
