@@ -51,10 +51,20 @@ export default function NotebookReport({
       ``
     ];
 
+    const getScenarioLabel = (scenario: string) => {
+      switch (scenario) {
+        case 'social': return 'Fase 1 • Caso 1: Redes Sociais';
+        case 'pdv': return 'Fase 1 • Caso 2: Sistema PDV';
+        case 'checkout': return 'Fase 2 • Caso 3: Checkout de Viagem';
+        case 'dashboard': return 'Fase 2 • Caso 4: Painel SaaS';
+        default: return 'Cenário Desconhecido';
+      }
+    };
+
     ALL_BUGS.forEach((bug, idx) => {
       const found = foundBugs.includes(bug.id);
       lines.push(`${idx + 1}. [${found ? 'RESOLVIDO' : 'NÃO DETECTADO'}] ${bug.title} (${bug.type})`);
-      lines.push(`   Cenário: ${bug.scenario === 'social' ? 'Rede Social' : 'Ponto de Venda (PDV)'}`);
+      lines.push(`   Cenário: ${getScenarioLabel(bug.scenario)}`);
       if (found) {
         lines.push(`   Problema: ${bug.detailedDesc}`);
         lines.push(`   Impacto Profissional: ${bug.impact}`);
@@ -193,7 +203,10 @@ export default function NotebookReport({
                           {bug.type}
                         </span>
                         <span className="text-[10px] text-neutral-500 font-mono">
-                          {bug.scenario === 'social' ? 'Caso 1: Redes Sociais' : 'Caso 2: Sistema PDV'}
+                          {bug.scenario === 'social' ? 'Fase 1 • Caso 1: Redes Sociais' : 
+                           bug.scenario === 'pdv' ? 'Fase 1 • Caso 2: Sistema PDV' :
+                           bug.scenario === 'checkout' ? 'Fase 2 • Caso 3: Checkout de Viagem' :
+                           'Fase 2 • Caso 4: Painel SaaS'}
                         </span>
                       </div>
                       <h4 className="font-sans font-bold text-sm text-neutral-850 mt-0.5">{bug.title}</h4>

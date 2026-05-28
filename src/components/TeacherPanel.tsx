@@ -186,9 +186,12 @@ export default function TeacherPanel({ onUnlockAll, foundBugsCount }: TeacherPan
             {ALL_BUGS.map((bug, idx) => (
               <div key={bug.id} className="bg-slate-850 p-3.5 rounded-xl border border-slate-800 text-xs">
                 <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-2 mb-2">
-                  <span className="font-bold text-sky-450 font-mono">#0{idx + 1} - {bug.title} ({bug.type})</span>
+                  <span className="font-bold text-sky-450 font-mono">#{idx < 9 ? `0${idx + 1}` : idx + 1} - {bug.title} ({bug.type})</span>
                   <span className="text-[10px] text-slate-500 font-mono uppercase">
-                    {bug.scenario === 'social' ? 'Redes Sociais' : 'Frente de Caixa (PDV)'}
+                    {bug.scenario === 'social' ? 'Fase 1 • Caso 1: Redes Sociais' : 
+                     bug.scenario === 'pdv' ? 'Fase 1 • Caso 2: Frente de Caixa (PDV)' :
+                     bug.scenario === 'checkout' ? 'Fase 2 • Caso 3: Checkout de Viagem' :
+                     'Fase 2 • Caso 4: Painel Executivo SaaS'}
                   </span>
                 </div>
                 
